@@ -1,0 +1,128 @@
+Step 1: index.jsp (Login Form)
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login Page</title>
+</head>
+<body>
+<h2>Login System</h2>
+
+<form action="login" method="post">
+    Username: <input type="text" name="username" required><br><br>
+    Password: <input type="password" name="password" required><br><br>
+    <input type="submit" value="Login">
+</form>
+
+</body>
+</html>
+
+
+---
+
+✨ Step 2: LoginServlet.java
+
+Create this inside src/com/login:
+
+package com.login;
+
+import java.io.IOException;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+
+public class LoginServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String user = request.getParameter("username");
+        String pass = request.getParameter("password");
+
+        
+        if(user.equals("admin") && pass.equals("1234")){
+            // Success
+            RequestDispatcher rd = request.getRequestDispatcher("success.jsp");
+            rd.forward(request, response);
+        } else {
+            // Error
+            RequestDispatcher rd = request.getRequestDispatcher("error.jsp");
+            rd.forward(request, response);
+        }
+    }
+}
+
+
+---
+
+✨ Step 3: success.jsp
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Success</title>
+</head>
+<body>
+<h2>Login Successful!</h2>
+<p>Welcome, Admin!</p>
+</body>
+</html>
+
+
+---
+
+✨ Step 4: error.jsp
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Error</title>
+</head>
+<body>
+<h2>Login Failed!</h2>
+<p>Incorrect username or password.</p>
+<a href="index.jsp">Try Again</a>
+</body>
+</html>
+
+
+---
+
+✨ Step 5: web.xml (Servlet Mapping)
+
+Create inside WebContent → WEB-INF:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee 
+         https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd" 
+         version="5.0">
+
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.login.LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+</web-app>
+
+
+
+
+
+Appendix A: Code Files
+
+index.jsp – Login form
+
+LoginServlet.java – Processes login validation
+
+success.jsp – Login success page
+
+error.jsp – Login failure page
+
+web.xml – Servlet configuration
